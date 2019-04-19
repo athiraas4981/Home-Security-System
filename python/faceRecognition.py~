@@ -92,7 +92,37 @@ def detect_face(camera, rawCapture):
 			for (x,y,w,h) in faces_detected:
 				cv2.rectangle(image, (x,y), (x+w, y+h),(255,0,0), thickness=5)
 				cv2.imwrite('images/c1.png', image)
-					name[int(i)] = user[i]
+				return faces_detected, gray_img
+ 			#break
+ 		
+		return faces_detected, gray_img
+		# show the frame
+		#cv2.imshow("Frame", image)
+		#key = cv2.waitKey(1) & 0xFF
+	
+		# clear the stream in preparation for the next frame
+		rawCapture.truncate(0)
+ 
+		# if the `q` key was pressed, break from the loop
+		#if key == ord("q"):
+		#	break
+
+
+def identify_face(faces_detected, gray_img):
+		
+	test_img = cv2.imread('images/c1.png')
+	face_recognizer = cv2.createLBPHFaceRecognizer()
+	face_recognizer.load('trainingData.yml')
+
+	#name = {0: "Arunjith", 1: "Athira", 2: "Rahul", 3: "Muneert", 4: "Nadiya"}
+
+	db = TinyDB('users.json')
+	users = db.all()
+	name = {}
+
+	for user in users:
+		for i in user:
+			name[int(i)] = user[i]
 		
 	users = ast.literal_eval(json.dumps(name))
 	new_list = {}
